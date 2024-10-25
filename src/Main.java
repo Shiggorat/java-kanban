@@ -1,3 +1,9 @@
+import controllers.TaskManager;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -22,7 +28,7 @@ public class Main {
         taskManager.addSubtask(subtask2ep1);
         System.out.println(epic1.getSubtasks());
 
-        Epic epic1upd = new Epic(epic1.getId(), "Поездка на природу", "Теперь едем на речку", Status.IN_PROGRESS);
+        Epic epic1upd = new Epic(epic1.getId(), "Поездка на природу", "Теперь едем на речку");
         taskManager.updateEpic(epic1upd);
         System.out.println(taskManager.getEpics());
         System.out.println(epic1upd.getSubtasks());

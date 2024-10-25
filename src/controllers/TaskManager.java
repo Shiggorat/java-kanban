@@ -1,5 +1,11 @@
+package controllers;
+
 import java.util.HashMap;
 import java.util.ArrayList;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 
 public class TaskManager {
 
@@ -47,41 +53,42 @@ public class TaskManager {
     }
 
 
-    public void addTask(Task task) {
+    public int addTask(Task task) {
         task.setId(idGenerator());
         taskList.put(task.getId(), task);
+        return task.getId();
     }
 
-    public void addEpic(Epic epic) {
+    public int addEpic(Epic epic) {
         epic.setId(idGenerator());
         epicList.put(epic.getId(), epic);
+        return epic.getId();
     }
 
-    public void addSubtask(Subtask subtask) {
+    public int addSubtask(Subtask subtask) {
         subtask.setId(idGenerator());
         subtaskList.put(subtask.getId(), subtask);
         Epic epic = epicList.get(subtask.getEpicId());
         epic.addSubtask(subtask);
         epicCheckStatus(epic);
+        return subtask.getId();
     }
 
     public void epicCheckStatus(Epic epic) {
-        int doneStat = 0;
         int newStat = 0;
         for (Subtask subtask : epic.getSubtasks()) {
+            if (subtask.getStatus() == Status.IN_PROGRESS) {
+                epic.setStatus(Status.IN_PROGRESS);
+                return;
+            }
             if (subtask.getStatus() == Status.NEW) {
                 newStat++;
-            }
-            if (subtask.getStatus() == Status.DONE) {
-                doneStat++;
             }
         }
         if (newStat == epic.getSubtasks().size()) {
             epic.setStatus(Status.NEW);
-        } else if (doneStat == epic.getSubtasks().size()) {
-            epic.setStatus(Status.DONE);
         } else {
-            epic.setStatus(Status.IN_PROGRESS);
+            epic.setStatus(Status.DONE);
         }
     }
 
