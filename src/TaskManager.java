@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class TaskManager {
 
-    private HashMap<Integer, Task> taskList;
-    private HashMap<Integer, Epic> epicList;
-    private HashMap<Integer, Subtask> subtaskList;
+    private final HashMap<Integer, Task> taskList;
+    private final HashMap<Integer, Epic> epicList;
+    private final HashMap<Integer, Subtask> subtaskList;
 
     private int taskId = 0;
 
