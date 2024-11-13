@@ -115,26 +115,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        if(!taskList.isEmpty()) {
-            historyManager.add(taskList.get(id));
+        Task taskClone = taskList.get(id);
+        if(!taskList.isEmpty() && taskList.containsKey(id)) {
+            historyManager.add(taskClone);
         }
-        return taskList.get(id);
+        return taskClone;
     }
 
     @Override
     public Epic getEpicById(int id) {
-        if(!epicList.isEmpty()) {
-            historyManager.add(epicList.get(id));
+        Epic epicClone = epicList.get(id);
+        if(!epicList.isEmpty() && epicList.containsKey(id)) {
+            historyManager.add(epicClone);
         }
-        return epicList.get(id);
+        return epicClone;
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        if(!subtaskList.isEmpty()) {
-            historyManager.add(subtaskList.get(id));
+        Subtask subtClone = subtaskList.get(id);
+        if(!subtaskList.isEmpty() && subtaskList.containsKey(id)) {
+            historyManager.add(subtClone);
         }
-        return subtaskList.get(id);
+        return subtClone;
     }
 
     @Override
