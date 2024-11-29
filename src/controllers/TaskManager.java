@@ -49,4 +49,6 @@ public interface TaskManager {
     int idGenerator();
 
     List<Task> getHistory();
+
+    void remove(int id);
 }

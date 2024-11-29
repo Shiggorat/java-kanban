@@ -31,6 +31,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void remove(int id) {
+        historyManager.remove(id);
+    }
+
+
+
+    @Override
     public int idGenerator() {
         return ++taskId;
     }
