@@ -10,16 +10,16 @@ import java.util.HashMap;
 public class InMemoryHistoryManager implements HistoryManager {
 
 
-    private Node<Task> head;
-    private Node<Task> tail;
-    private final Map<Integer, Node<Task>> history = new HashMap<>();
+    private Node head;
+    private Node tail;
+    private final Map<Integer, Node> history = new HashMap<>();
 
     public void add(Task task) {
         linkLast(task);
     }
 
     private void linkLast(Task task) {
-        Node<Task> node = new Node<>(task);
+        Node node = new Node(task);
         if (history.containsKey(task.getId())) {
             removeNode(history.get(task.getId()));
         }
@@ -35,11 +35,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     }
 
-    private void removeNode(Node<Task> node) {
+    private void removeNode(Node node) {
         if (node != null) {
             history.remove(node.getTask().getId());
-            Node<Task> prev = node.getPrev();
-            Node<Task> next = node.getNext();
+            Node prev = node.getPrev();
+            Node next = node.getNext();
             if (head == node) {
                 head = node.getNext();
             }
@@ -61,7 +61,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public List<Task> getTasks() {
         List<Task> list = new ArrayList<>();
-        Node<Task> node = head;
+        Node node = head;
         while (node != null) {
             list.add(node.getTask());
             node = node.getNext();
@@ -73,10 +73,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         return getTasks();
     }
 
-    class Node<Task> {
+    class Node {
         private Task task;
-        private Node<Task> prev;
-        private Node<Task> next;
+        private Node prev;
+        private Node next;
 
         public Node(Task task) {
             this.task = task;
@@ -88,11 +88,11 @@ public class InMemoryHistoryManager implements HistoryManager {
             return this.task;
         }
 
-        public Node<Task> getPrev() {
+        public Node getPrev() {
             return this.prev;
         }
 
-        public Node<Task> getNext() {
+        public Node getNext() {
             return this.next;
         }
 
@@ -100,11 +100,11 @@ public class InMemoryHistoryManager implements HistoryManager {
             this.task = task;
         }
 
-        public void setPrev(Node<Task> prev) {
+        public void setPrev(Node prev) {
             this.prev = prev;
         }
 
-        public void setNext(Node<Task> next) {
+        public void setNext(Node next) {
             this.next = next;
         }
 
