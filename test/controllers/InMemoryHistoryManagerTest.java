@@ -102,7 +102,7 @@ class InMemoryHistoryManagerTest {
         taskManager.addTask(task2);
         taskManager.getTaskById(task1.getId());
         taskManager.getTaskById(task2.getId());
-        taskManager.remove(task1.getId());
+        taskManager.deleteTaskById(task1.getId());
 
         assertEquals(1, taskManager.getHistory().size()
                 , "Размер истории больше 1, таск не был удален");
