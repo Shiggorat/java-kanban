@@ -64,31 +64,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public String toString(Task task) {
         String line = null;
-        line = task.getId() + ", " + task.getType() + ", " + task.getName() +
-                        ", " + task.getStatus() + ", " + task.getDescription();
+        line = task.getId() + "," + task.getType() + "," + task.getName() +
+                        "," + task.getStatus() + "," + task.getDescription();
         return line;
     }
 
     public String toString(Epic epic) {
         String line = null;
-        line = epic.getId() + ", " + epic.getType() + ", " + epic.getName() +
-                ", " + epic.getStatus() + ", " + epic.getDescription();
+        line = epic.getId() + "," + epic.getType() + "," + epic.getName() +
+                "," + epic.getStatus() + "," + epic.getDescription();
         return line;
     }
 
     public String toString(Subtask subtask) {
         String line = null;
-        line = subtask.getId() + ", " + subtask.getType() + ", " + subtask.getName() +
-                ", " + subtask.getStatus() + ", " + subtask.getDescription() + ", " + subtask.getEpicId();
+        line = subtask.getId() + "," + subtask.getType() + "," + subtask.getName() +
+                "," + subtask.getStatus() + "," + subtask.getDescription() + "," + subtask.getEpicId();
         return line;
     }
 
     public Task fromString(String value) {
         String[] values = value.split(",");
-        int id = Integer.parseInt(values[0].trim());
-        TaskType type = TaskType.valueOf(values[1].trim());
+        int id = Integer.parseInt(values[0]);
+        TaskType type = TaskType.valueOf(values[1]);
         String name = values[2];
-        Status status = Status.valueOf(values[3].trim());
+        Status status = Status.valueOf(values[3]);
         String description = values[4];
 
         switch (type) {
@@ -97,7 +97,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             case EPIC:
                 return new Epic(id, name, description);
             case SUBTASK:
-                int epicId = Integer.parseInt(values[5].trim());;
+                int epicId = Integer.parseInt(values[5]);;
                 return new Subtask(id, name, description, status, epicId);
 
         }
