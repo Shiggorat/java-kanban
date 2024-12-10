@@ -11,10 +11,10 @@ import model.Task;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final HashMap<Integer, Task> taskList;
-    private final HashMap<Integer, Epic> epicList;
-    private final HashMap<Integer, Subtask> subtaskList;
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final HashMap<Integer, Task> taskList;
+    protected final HashMap<Integer, Epic> epicList;
+    protected final HashMap<Integer, Subtask> subtaskList;
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
 
     private int taskId = 0;
