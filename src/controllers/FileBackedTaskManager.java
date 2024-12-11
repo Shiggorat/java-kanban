@@ -11,10 +11,20 @@ import java.util.List;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
+    private File file;
+
+    public FileBackedTaskManager() {
+    }
+
+    public FileBackedTaskManager(File file) {
+        this.file = file;
+    }
+
+
 
 
     public void save() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("save/load file/file.csv", StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,epic\n");
             for (Task task : super.getTasks()) {
                 writer.write(toString(task));
@@ -35,7 +45,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
-        InMemoryTaskManager fileBacked = new FileBackedTaskManager();
+        InMemoryTaskManager fileBacked = new FileBackedTaskManager(file);
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             List<String> readedLines = new ArrayList<>();
             String line;
@@ -56,7 +66,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ManagerSaveException();
         }
         return ((FileBackedTaskManager) fileBacked);
     }
@@ -204,18 +214,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    @Override
-    public ArrayList<Epic> getEpics() {
-        return super.getEpics();
-    }
 
-    @Override
-    public ArrayList<Task> getTasks() {
-        return super.getTasks();
-    }
-
-    @Override
-    public ArrayList<Subtask> getSubtasks() {
-        return super.getSubtasks();
-    }
 }
