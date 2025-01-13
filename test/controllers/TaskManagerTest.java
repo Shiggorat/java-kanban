@@ -259,7 +259,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task task1 = createTask();
         taskManager.addTask(task1);
         taskManager.deleteTaskById(1);
-        assertTrue(taskManager.getTasks().isEmpty());
+        assertEquals(0, taskManager.getTasks().size());
     }
 
     @Test
@@ -281,6 +281,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertTrue(taskManager.getEpics().size() == 1);
 
         assertTrue(taskManager.getSubtasks().size() == 1);
+
     }
 
 }

@@ -1,6 +1,5 @@
 package controllers;
 
-import exceptions.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -54,12 +53,4 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         assertEquals(manager.getSubtasks(), manager2.getSubtasks());
     }
 
-    @Test
-    public void testException() {
-        ManagerSaveException ex = assertThrows(
-                ManagerSaveException.class,
-                () -> manager.save()
-        );
-        assertEquals("Списки пусты", ex.getMessage());
-    }
 }

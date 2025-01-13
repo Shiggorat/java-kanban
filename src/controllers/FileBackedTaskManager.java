@@ -2,6 +2,8 @@ package controllers;
 
 import exceptions.ManagerSaveException;
 import model.*;
+
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -22,12 +24,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
 
-    public void save() throws ManagerSaveException {
-        if (getTasks().isEmpty() &&  getEpics().isEmpty() && getSubtasks().isEmpty()) {
-            throw new ManagerSaveException("Списки пусты");
-        }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8));
+    public void save() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,startTime,duration,endTime,epic,\n");
             for (Task task : super.getTasks()) {
                 writer.write(toString(task));
@@ -42,12 +40,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка сохранения");
+            throw new ManagerSaveException();
         }
 
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
+    public static FileBackedTaskManager loadFromFile(File file) {
         InMemoryTaskManager fileBacked = new FileBackedTaskManager(file);
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             List<String> readedLines = new ArrayList<>();
@@ -69,7 +67,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка загрузки");
+            throw new ManagerSaveException();
         }
         return ((FileBackedTaskManager) fileBacked);
     }
