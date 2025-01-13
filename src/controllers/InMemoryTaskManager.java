@@ -1,6 +1,6 @@
 package controllers;
 
-import java.time.Duration;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -257,7 +257,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     public boolean checkCrossingTime(Task task) {
         List<Task> tasks = getPrioritizedTasks();
-        for(Task element : tasks) {
+        for (Task element : tasks) {
             if(task.getStartTime().isBefore(element.getStartTime()) && task.getEndTime().isBefore(element.getStartTime())
                     || task.getStartTime().isAfter(element.getEndTime()) && task.getEndTime().isAfter(element.getEndTime())) {
                 return false;
@@ -268,10 +268,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addPrioritizedTasks(Task task) {
-        if(this.prioritizedTasks.isEmpty() && task.getStartTime() != null) {
+        if (this.prioritizedTasks.isEmpty() && task.getStartTime() != null) {
             this.prioritizedTasks.add(task);
         } else if (task.getStartTime() != null) {
-            if(!checkCrossingTime(task)) {
+            if (!checkCrossingTime(task)) {
                 this.prioritizedTasks.add(task);
             }
         }
