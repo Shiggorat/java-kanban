@@ -22,7 +22,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
 
-    public void save() throws ManagerSaveException{
+    public void save() throws ManagerSaveException {
         if (getTasks().isEmpty() &&  getEpics().isEmpty() && getSubtasks().isEmpty()) {
             throw new ManagerSaveException("Списки пусты");
         }
