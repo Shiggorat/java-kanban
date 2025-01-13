@@ -258,7 +258,7 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean checkCrossingTime(Task task) {
         List<Task> tasks = getPrioritizedTasks();
         for (Task element : tasks) {
-            if(task.getStartTime().isBefore(element.getStartTime()) && task.getEndTime().isBefore(element.getStartTime())
+            if (task.getStartTime().isBefore(element.getStartTime()) && task.getEndTime().isBefore(element.getStartTime())
                     || task.getStartTime().isAfter(element.getEndTime()) && task.getEndTime().isAfter(element.getEndTime())) {
                 return false;
             }
