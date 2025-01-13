@@ -49,4 +49,10 @@ public interface TaskManager {
     int idGenerator();
 
     List<Task> getHistory();
+
+    void addPrioritizedTasks(Task task);
+
+    List<Task> getPrioritizedTasks();
+
+
 }

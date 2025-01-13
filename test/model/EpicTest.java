@@ -14,10 +14,4 @@ class EpicTest {
         assertEquals(epic1, epic2, "Ошибка! Эпики должны быть равны, если их айди равны");
     }
 
-//    @Test
-//    void shouldNotAddEpicAsSubtask() {
-//        Epic epic1 = new Epic(2, "Поездка на природу", "Теперь едем на речку");
-//        assertFalse(epic1.addSubtask(epic1));
-//    }
-
 }
