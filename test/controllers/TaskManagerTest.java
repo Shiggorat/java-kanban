@@ -6,10 +6,7 @@ import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -284,7 +281,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertTrue(taskManager.getEpics().size() == 1);
 
         assertTrue(taskManager.getSubtasks().size() == 1);
-
     }
 
 }
