@@ -35,23 +35,24 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 LocalDateTime.of(2025, 1, 12, 11, 15));
     }
 
-    protected Subtask createSubtask(Epic epic) {
+    protected Subtask createSubtask1(Epic epic) {
         return new Subtask("subtask1", "SubtaskDescr1", epic.getId(),
                 LocalDateTime.of(2025, 1, 1, 14, 33), 5);
     }
 
+    protected Subtask createSubtask2(Epic epic) {
+        return new Subtask("subtask2", "SubtaskDescr2", epic.getId(),
+                LocalDateTime.of(2025, 1, 5, 14, 33), 5);
+    }
+
     @Test
-    public void shouldMakeEpicStartTimeAndDurationAsSubtaskAfterUpdate() {
+    public void shouldMakeEpicStartTimeAndDurationAsSubtask() {
         Epic epic = createEpic();
         taskManager.addEpic(epic);
-        Subtask subtask = createSubtask(epic);
+        Subtask subtask = createSubtask1(epic);
         taskManager.addSubtask(subtask);
-        assertTrue(epic.getStartTime() != subtask.getStartTime());
-        assertTrue(epic.getDuration() != subtask.getDuration());
-
-        taskManager.updateEpic(epic);
-        assertEquals(epic.getStartTime(), subtask.getStartTime());
-        assertEquals(epic.getDuration(), subtask.getDuration());
+        assertTrue(epic.getStartTime() == subtask.getStartTime());
+        assertTrue(epic.getDuration() == subtask.getDuration());
     }
 
     @Test
@@ -104,7 +105,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldUpdateSubtaskStatusToInProgress() {
         Epic epic = createEpic();
         taskManager.addEpic(epic);
-        Subtask subtask = createSubtask(epic);
+        Subtask subtask = createSubtask1(epic);
         taskManager.addSubtask(subtask);
         subtask.setStatus(Status.IN_PROGRESS);
         taskManager.updateSubtask(subtask);
@@ -133,7 +134,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldUpdateSubtaskStatusToDone() {
         Epic epic = createEpic();
         taskManager.addEpic(epic);
-        Subtask subtask = createSubtask(epic);
+        Subtask subtask = createSubtask1(epic);
         taskManager.addSubtask(subtask);
         subtask.setStatus(Status.DONE);
         taskManager.updateSubtask(subtask);
@@ -146,7 +147,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldReturnHistoryWithTasks() {
         Epic epic = createEpic();
         taskManager.addEpic(epic);
-        Subtask subtask = createSubtask(epic);
+        Subtask subtask = createSubtask1(epic);
         taskManager.addSubtask(subtask);
         taskManager.getEpicById(epic.getId());
         taskManager.getSubtaskById(subtask.getId());
@@ -175,8 +176,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void shouldAddNewEpicAndSubtaskAndGetItById() {
         Epic epic1 = createEpic();
         taskManager.addEpic(epic1);
-        Subtask subtask1ep1 = createSubtask(epic1);
-        Subtask subtask2ep1 = createSubtask(epic1);
+        Subtask subtask1ep1 = createSubtask1(epic1);
+        Subtask subtask2ep1 = createSubtask2(epic1);
         taskManager.addSubtask(subtask1ep1);
         taskManager.addSubtask(subtask2ep1);
 
@@ -206,8 +207,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic1 = createEpic();
         taskManager.addEpic(epic1);
 
-        Subtask subtask1ep1 = createSubtask(epic1);
-        Subtask subtask2ep1 = createSubtask(epic1);
+        Subtask subtask1ep1 = createSubtask1(epic1);
+        Subtask subtask2ep1 = createSubtask2(epic1);
         taskManager.addSubtask(subtask1ep1);
         taskManager.addSubtask(subtask2ep1);
         assertTrue(Status.NEW == epic1.getStatus());
@@ -243,8 +244,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldDeleteEpicAndSubtasks() {
         Epic epic1 = createEpic();
         taskManager.addEpic(epic1);
-        Subtask subtask1ep1 = createSubtask(epic1);
-        Subtask subtask2ep1 = createSubtask(epic1);
+        Subtask subtask1ep1 = createSubtask1(epic1);
+        Subtask subtask2ep1 = createSubtask2(epic1);
         taskManager.addSubtask(subtask1ep1);
         taskManager.addSubtask(subtask2ep1);
         taskManager.deleteSubtasks();
@@ -266,16 +267,18 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldDeleteEpicAndSubtasksById() {
         Epic epic1 = createEpic();
         taskManager.addEpic(epic1);
-        Subtask subtask1ep1 = createSubtask(epic1);
-        Subtask subtask2ep1 = createSubtask(epic1);
+        Subtask subtask1ep1 = createSubtask1(epic1);
+        Subtask subtask2ep1 = createSubtask2(epic1);
+
         taskManager.addSubtask(subtask1ep1);
         taskManager.addSubtask(subtask2ep1);
         taskManager.deleteSubtaskById(2);
+
         assertTrue(taskManager.getSubtasks().size() == 1);
 
         Epic epic2 = createEpic();
         taskManager.addEpic(epic2);
-        Subtask subtask1ep2 = createSubtask(epic2);
+        Subtask subtask1ep2 = createSubtask1(epic2);
         taskManager.addSubtask(subtask1ep2);
         taskManager.deleteEpicById(4);
         assertTrue(taskManager.getEpics().size() == 1);

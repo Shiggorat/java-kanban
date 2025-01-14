@@ -85,29 +85,34 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addTask(Task task) {
-        task.setId(idGenerator());
-        taskList.put(task.getId(), task);
-        addPrioritizedTasks(task);
-        return task.getId();
+        if (!checkCrossingTime(task)) {
+            task.setId(idGenerator());
+            taskList.put(task.getId(), task);
+            addPrioritizedTasks(task);
+            return task.getId();
+        }
+        return 0;
     }
 
     @Override
     public int addEpic(Epic epic) {
         epic.setId(idGenerator());
         epicList.put(epic.getId(), epic);
-        addPrioritizedTasks(epic);
         return epic.getId();
     }
 
     @Override
     public int addSubtask(Subtask subtask) {
-        subtask.setId(idGenerator());
-        subtaskList.put(subtask.getId(), subtask);
-        Epic epic = epicList.get(subtask.getEpicId());
-        epic.addSubtask(subtask);
-        epicCheckStatus(epic);
-        addPrioritizedTasks(subtask);
-        return subtask.getId();
+        if (!checkCrossingTime(subtask)) {
+            subtask.setId(idGenerator());
+            subtaskList.put(subtask.getId(), subtask);
+            Epic epic = epicList.get(subtask.getEpicId());
+            epic.addSubtask(subtask);
+            epicCheckStatus(epic);
+            addPrioritizedTasks(subtask);
+            return subtask.getId();
+        }
+        return 0;
     }
 
     @Override
@@ -254,25 +259,23 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public boolean checkCrossingTime(Task task) {
-        List<Task> tasks = getPrioritizedTasks();
-        for (Task element : tasks) {
-            if (task.getStartTime().isBefore(element.getStartTime()) && task.getEndTime().isBefore(element.getStartTime())
-                    || task.getStartTime().isAfter(element.getEndTime()) && task.getEndTime().isAfter(element.getEndTime())) {
-                return false;
-            }
+        if (this.prioritizedTasks.isEmpty() && task.getStartTime() != null) {
+            return false;
+        } else if (task.getStartTime() != null) {
+            List<Task> tasks = getPrioritizedTasks();
+                for (Task element : tasks) {
+                    if (task.getStartTime().isBefore(element.getStartTime()) && task.getEndTime().isBefore(element.getStartTime())
+                            || task.getStartTime().isAfter(element.getEndTime()) && task.getEndTime().isAfter(element.getEndTime())) {
+                        return false;
+                    }
+                }
         }
         return true;
     }
 
     @Override
     public void addPrioritizedTasks(Task task) {
-        if (this.prioritizedTasks.isEmpty() && task.getStartTime() != null) {
-            this.prioritizedTasks.add(task);
-        } else if (task.getStartTime() != null) {
-            if (!checkCrossingTime(task)) {
-                this.prioritizedTasks.add(task);
-            }
-        }
+        this.prioritizedTasks.add(task);
     }
 
     @Override

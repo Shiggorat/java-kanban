@@ -3,12 +3,13 @@ package model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks = new ArrayList<>();
     private final TaskType type = TaskType.EPIC;
-    LocalDateTime endTime;
+    private LocalDateTime endTime;
 
 
     public Epic(int id, String name, String description) {
@@ -63,8 +64,29 @@ public class Epic extends Task {
     }
 
     @Override
+    public LocalDateTime getStartTime() {
+        if (subtasks.isEmpty()) {
+            return super.getStartTime();
+        } else {
+            return getSubtasks().getFirst().getStartTime();
+        }
+    }
+
+    @Override
     public Duration getDuration() {
-        return Duration.between(getStartTime(), getEndTime());
+        if (subtasks.isEmpty()) {
+            return super.getDuration();
+        }
+        List<Subtask> subtaskList = getSubtasks();
+        Duration sum = subtaskList.getFirst().getDuration();
+        if(subtaskList.size() == 1) {
+            return sum;
+        } else {
+            for (int i = 1; i < subtaskList.size(); i++) {
+                sum = sum.plus(subtaskList.get(i).getDuration());
+            }
+        }
+        return sum;
     }
 
     @Override

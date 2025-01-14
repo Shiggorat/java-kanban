@@ -42,9 +42,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         manager.addTask(task1);
         Epic epic1 = createEpic();
         manager.addEpic(epic1);
-        Subtask subtask1 = createSubtask(epic1);
+        Subtask subtask1 = createSubtask1(epic1);
         manager.addSubtask(subtask1);
-        Subtask subtask2 = createSubtask(epic1);
+        Subtask subtask2 = createSubtask1(epic1);
         manager.addSubtask(subtask2);
 
         FileBackedTaskManager manager2 = FileBackedTaskManager.loadFromFile(file);
