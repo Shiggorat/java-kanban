@@ -3,7 +3,6 @@ package controllers;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,4 +48,10 @@ public interface TaskManager {
     int idGenerator();
 
     List<Task> getHistory();
+
+    void addPrioritizedTasks(Task task);
+
+    List<Task> getPrioritizedTasks();
+
+
 }

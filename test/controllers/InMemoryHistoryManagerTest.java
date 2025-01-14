@@ -7,6 +7,8 @@ import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
@@ -18,14 +20,46 @@ class InMemoryHistoryManagerTest {
         taskManager = Managers.getDefault();
     }
 
+    protected Task createTask1() {
+        return new Task("TASK1", "TaskDescr1", LocalDateTime.of(2025, 1, 10, 14, 33), 600);
+    }
+
+    protected Task createTask2() {
+        return new Task("TASK2", "TaskDescr2", LocalDateTime.of(2026, 1, 10, 14, 33), 600);
+    }
+
+    protected Epic createEpic1() {
+
+        return new Epic("EPIC1", "EpicDescr1",
+                LocalDateTime.of(2025, 1, 10, 14, 33), 100,
+                LocalDateTime.of(2025, 1, 12, 11, 15));
+    }
+
+    protected Epic createEpic2() {
+
+        return new Epic("EPIC2", "EpicDescr2",
+                LocalDateTime.of(2026, 1, 10, 14, 33), 100,
+                LocalDateTime.of(2026, 1, 12, 11, 15));
+    }
+
+    protected Subtask createSubtask1(Epic epic) {
+        return new Subtask("subtask1", "SubtaskDescr1", epic.getId(),
+                LocalDateTime.of(2025, 1, 1, 14, 33), 5);
+    }
+
+    protected Subtask createSubtask2(Epic epic) {
+        return new Subtask("subtask2", "SubtaskDescr2", epic.getId(),
+                LocalDateTime.of(2025, 1, 5, 14, 33), 5);
+    }
+
 
 
     @Test
     public void historyShouldReturnNotUpdatedTask() {
-        Task task1 = new Task("пырыры", "парара");
+        Task task1 = createTask1();
         taskManager.addTask(task1);
         taskManager.getTaskById(task1.getId());
-        taskManager.updateTask(new Task(task1.getId(), "Погулять", "Гулять долго", Status.IN_PROGRESS));
+        taskManager.updateTask(createTask2());
 
         assertEquals(task1.getName(), taskManager.getHistory().get(0).getName()
                 , "Изначальный таск не сохранился");
@@ -35,10 +69,10 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyShouldReturnNotUpdatedEpic() {
-        Epic epic1 = new Epic("пырыры", "парара");
+        Epic epic1 = createEpic1();
         taskManager.addEpic(epic1);
         taskManager.getEpicById(epic1.getId());
-        taskManager.updateEpic(new Epic(epic1.getId(), "Погулять", "Гулять долго"));
+        taskManager.updateEpic(createEpic2());
 
         assertEquals(epic1.getName(), taskManager.getHistory().getFirst().getName()
                 , "Изначальный эпик не сохранился");
@@ -48,9 +82,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyShouldReturnNotUpdatedSubtask() {
-        Epic epic1 = new Epic("Пойти туда", "Пойти сюда");
+        Epic epic1 = createEpic1();
         taskManager.addEpic(epic1);
-        Subtask sub1 = new Subtask("Сюда иду", "Туда иду", epic1.getId());
+        Subtask sub1 = createSubtask1(epic1);
         taskManager.addSubtask(sub1);
         taskManager.getSubtaskById(sub1.getId());
         taskManager.updateSubtask(new Subtask("Ходить туда-сюда", "Ходить долго", epic1.getId()));
@@ -63,7 +97,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyShouldNotIncreaseSizeIfAddedTheSameTask() {
-        Task task1 = new Task("пырыры", "парара");
+        Task task1 = createTask1();
         taskManager.addTask(task1);
         taskManager.getTaskById(task1.getId());
         taskManager.getTaskById(task1.getId());
@@ -73,7 +107,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyShouldNotIncreaseSizeIfAddedTheSameEpic() {
-        Epic epic1 = new Epic("пырыры", "парара");
+        Epic epic1 = createEpic1();
         taskManager.addEpic(epic1);
         taskManager.getEpicById(epic1.getId());
         taskManager.getEpicById(epic1.getId());
@@ -83,9 +117,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyShouldNotIncreaseSizeIfAddedTheSameSubtask() {
-        Epic epic1 = new Epic("Пойти туда", "Пойти сюда");
+        Epic epic1 = createEpic1();
         taskManager.addEpic(epic1);
-        Subtask sub1 = new Subtask("Сюда иду", "Туда иду", epic1.getId());
+        Subtask sub1 = createSubtask1(epic1);
         taskManager.addSubtask(sub1);
         taskManager.getSubtaskById(sub1.getId());
         taskManager.getSubtaskById(sub1.getId());
@@ -96,29 +130,30 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void historyShouldRemoveTask() {
-        Task task1 = new Task("пырыры", "парара");
-        Task task2 = new Task("пырkkgjkыры", "парffyjyара");
+        Task task1 = createTask1();
+        Task task2 = createTask2();
         taskManager.addTask(task1);
         taskManager.addTask(task2);
         taskManager.getTaskById(task1.getId());
         taskManager.getTaskById(task2.getId());
         taskManager.deleteTaskById(task1.getId());
-
         assertEquals(1, taskManager.getHistory().size()
                 , "Размер истории больше 1, таск не был удален");
+
+        taskManager.deleteTaskById(task2.getId());
+        assertEquals(0, taskManager.getHistory().size()
+                , "Размер истории больше 0, таск не был удален");
     }
 
     @Test
     public void historyShouldAddTaskAtTheEndOfTheList() {
-        Task task1 = new Task("пырыры", "парара");
-        Task task2 = new Task("пырkkgjkыры", "парffyjyара");
+        Task task1 = createTask1();
+        Task task2 = createTask2();
         taskManager.addTask(task1);
         taskManager.addTask(task2);
         taskManager.getTaskById(task1.getId());
         taskManager.getTaskById(task2.getId());
         taskManager.getTaskById(task1.getId());
-
-
         assertEquals(task1.getName(), taskManager.getHistory().getLast().getName()
                 , "Таск не был добавлен в конец истории");
     }

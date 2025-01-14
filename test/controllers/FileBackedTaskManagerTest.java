@@ -3,27 +3,28 @@ package controllers;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
-    private static FileBackedTaskManager manager;
+    private static FileBackedTaskManager manager ;
     private static File file;
 
-
-    @BeforeEach
-    void tempFileCreation() {
+    @Override
+    protected FileBackedTaskManager getNewTaskManager() {
         try {
             file = File.createTempFile("file", ".csv");
             manager = new FileBackedTaskManager(file);
         } catch (Exception e) {
             System.out.println("No file created");
         }
+        return new FileBackedTaskManager(file);
     }
 
     @Test
@@ -37,13 +38,13 @@ class FileBackedTaskManagerTest {
 
     @Test
     void shouldSaveLoad() {
-        Task task1 = new Task("TASK1", "TaskDescr1");
+        Task task1 = createTask();
         manager.addTask(task1);
-        Epic epic1 = new Epic("EPIC1", "EpicDescr1");
+        Epic epic1 = createEpic();
         manager.addEpic(epic1);
-        Subtask subtask1 = new Subtask("subtask1", "SubtaskDescr1", epic1.getId());
+        Subtask subtask1 = createSubtask1(epic1);
         manager.addSubtask(subtask1);
-        Subtask subtask2 = new Subtask("subtask2", "SubtaskDescr2", epic1.getId());
+        Subtask subtask2 = createSubtask1(epic1);
         manager.addSubtask(subtask2);
 
         FileBackedTaskManager manager2 = FileBackedTaskManager.loadFromFile(file);
@@ -51,4 +52,5 @@ class FileBackedTaskManagerTest {
         assertEquals(manager.getEpics(), manager2.getEpics());
         assertEquals(manager.getSubtasks(), manager2.getSubtasks());
     }
+
 }
