@@ -79,7 +79,7 @@ public class Epic extends Task {
         }
         List<Subtask> subtaskList = getSubtasks();
         Duration sum = subtaskList.getFirst().getDuration();
-        if(subtaskList.size() == 1) {
+        if (subtaskList.size() == 1) {
             return sum;
         } else {
             for (int i = 1; i < subtaskList.size(); i++) {
