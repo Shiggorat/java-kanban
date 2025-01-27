@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    void updateTask(Task task);
+    int updateTask(Task task);
 
     void updateEpic(Epic epic);
 
-    void updateSubtask(Subtask subtask);
+    int updateSubtask(Subtask subtask);
 
     int addTask(Task task);
 

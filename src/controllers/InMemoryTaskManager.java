@@ -37,10 +37,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public int updateTask(Task task) {
         if (taskList.containsKey(task.getId())) {
-            taskList.put(task.getId(), task);
+            if (task.getStartTime().toString().equals(taskList.get(task.getId()).getStartTime().toString())) {
+                taskList.put(task.getId(), task);
+                return task.getId();
+            } else if (!checkCrossingTime(task)) {
+                taskList.put(task.getId(), task);
+                return task.getId();
+            } else return -1;
         }
+        return 0;
     }
 
     @Override
@@ -67,21 +74,25 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) {
-        if (!subtaskList.containsKey(subtask.getId())) {
-            return;
+    public int updateSubtask(Subtask subtask) {
+        if (subtaskList.containsKey(subtask.getId())) {
+            if (subtask.getStartTime().toString().equals(subtaskList.get(subtask.getId()).getStartTime().toString()) || !checkCrossingTime(subtask)) {
+                subtaskList.put(subtask.getId(), subtask);
+                Epic epic = epicList.get(subtask.getEpicId());
+                if (!epic.getSubtasks().contains(subtask)) {
+                    epic.getSubtasks().add(subtask);
+                } else {
+                    epic.getSubtasks().remove(subtask);
+                    epic.getSubtasks().add(subtask);
+                }
+                epicCheckStatus(epic);
+                return subtask.getId();
+            } else {
+                return -1;
+            }
         }
-        subtaskList.put(subtask.getId(), subtask);
-        Epic epic = epicList.get(subtask.getEpicId());
-        if (!epic.getSubtasks().contains(subtask)) {
-            epic.getSubtasks().add(subtask);
-        } else {
-            epic.getSubtasks().remove(subtask);
-            epic.getSubtasks().add(subtask);
-        }
-        epicCheckStatus(epic);
+        return 0;
     }
-
 
     @Override
     public int addTask(Task task) {
@@ -262,13 +273,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (this.prioritizedTasks.isEmpty() && task.getStartTime() != null) {
             return false;
         } else if (task.getStartTime() != null) {
+            int count = 1;
             List<Task> tasks = getPrioritizedTasks();
                 for (Task element : tasks) {
                     if (task.getStartTime().isBefore(element.getStartTime()) && task.getEndTime().isBefore(element.getStartTime())
                             || task.getStartTime().isAfter(element.getEndTime()) && task.getEndTime().isAfter(element.getEndTime())) {
-                        return false;
+                        count++;
                     }
                 }
+            return count == tasks.size();
         }
         return true;
     }
