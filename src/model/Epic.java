@@ -8,7 +8,6 @@ import java.util.List;
 public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks = new ArrayList<>();
-    private final TaskType type = TaskType.EPIC;
     private LocalDateTime endTime;
 
 
@@ -50,8 +49,9 @@ public class Epic extends Task {
         this.subtasks = subtasks;
     }
 
+    @Override
     public TaskType getType() {
-        return this.type;
+        return TaskType.EPIC;
     }
 
     public void setEndTime(LocalDateTime endTime) {

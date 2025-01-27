@@ -117,7 +117,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             case EPIC:
                 return new Epic(id, name, description, status, startTime, duration, endTime);
             case SUBTASK:
-                int epicId = Integer.parseInt(values[8]);;
+                int epicId = Integer.parseInt(values[8]);
                 return new Subtask(id, name, description, status, epicId, startTime, duration);
 
         }
@@ -125,9 +125,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public int updateTask(Task task) {
         super.updateTask(task);
         save();
+        return task.getId();
     }
 
     @Override
@@ -137,17 +138,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) {
+    public int updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         save();
+        return subtask.getId();
     }
 
 
     @Override
     public int addTask(Task task) {
-        super.addTask(task);
+        int i = super.addTask(task);
         save();
-        return task.getId();
+        return i;
     }
 
     @Override
@@ -159,9 +161,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public int addSubtask(Subtask subtask) {
-        super.addSubtask(subtask);
+        int i = super.addSubtask(subtask);
         save();
-        return subtask.getId();
+        return i;
     }
 
     @Override

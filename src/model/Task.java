@@ -3,6 +3,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Task {
+
     private String name;
     private String description;
     private int id;
@@ -87,7 +88,7 @@ public class Task {
     }
 
     public void setDuration(long duration) {
-        this.duration = Duration.ofMinutes(duration);;
+        this.duration = Duration.ofMinutes(duration);
     }
 
     public LocalDateTime getStartTime() {
