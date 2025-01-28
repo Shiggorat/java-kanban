@@ -18,8 +18,8 @@ public  class BaseHttpHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(LocalDateTime .class, new LocalDateTimeTypeAdapter())
-            .registerTypeAdapter(Duration .class, new DurationAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+            .registerTypeAdapter(Duration.class, new DurationAdapter())
             .create();
 
     @Override
@@ -39,18 +39,24 @@ public  class BaseHttpHandler implements HttpHandler {
                 default:
                     writeToUser(exchange, "Данный метод не предусмотрен");
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Ошибка выполнения запроса: " + e.getMessage());
         } finally {
             exchange.close();
         }
     }
 
-    protected void processGet(HttpExchange exchange) throws IOException {}
+    protected void processGet(HttpExchange exchange) throws IOException {
 
-    protected void processPost(HttpExchange exchange) throws IOException {}
+    }
 
-    protected void processDelete(HttpExchange exchange) throws IOException {}
+    protected void processPost(HttpExchange exchange) throws IOException {
+
+    }
+
+    protected void processDelete(HttpExchange exchange) throws IOException {
+
+    }
 
     protected void writeToUser(HttpExchange exchange, String message) throws  IOException {
         sendNotFound(exchange, message);
