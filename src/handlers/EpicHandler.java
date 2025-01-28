@@ -19,7 +19,6 @@ public class EpicHandler extends BaseHttpHandler {
         gson = getGson();
     }
 
-
     @Override
     protected void processGet(HttpExchange exchange) throws IOException {
         String path = getPath(exchange);
@@ -32,6 +31,7 @@ public class EpicHandler extends BaseHttpHandler {
             getEpics(exchange);
         }
     }
+
     @Override
     protected void processPost(HttpExchange exchange) throws IOException {
         String path = getPath(exchange);
