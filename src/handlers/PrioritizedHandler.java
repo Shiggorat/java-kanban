@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import controllers.TaskManager;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 public class PrioritizedHandler extends BaseHttpHandler {
 
